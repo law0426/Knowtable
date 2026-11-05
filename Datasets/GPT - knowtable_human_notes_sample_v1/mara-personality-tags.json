@@ -1,0 +1,101 @@
+{
+  "source_document": "mara-personality.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "guarded communication",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "careful reasoning",
+      "importance": 0.88,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "evidence-based thinking",
+      "importance": 0.86,
+      "confidence": 0.97,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "attention to detail",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "distrust of certainty",
+      "importance": 0.84,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "selective disclosure",
+      "importance": 0.75,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "detection of omissions",
+      "importance": 0.78,
+      "confidence": 0.97,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "suspicion",
+      "importance": 0.7,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "attribution bias",
+      "importance": 0.64,
+      "confidence": 0.88,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "emotional avoidance",
+      "importance": 0.62,
+      "confidence": 0.92,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "anxiety coping behaviour",
+      "importance": 0.54,
+      "confidence": 0.85,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "paper fragments",
+      "importance": 0.53,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "perfectionism",
+      "importance": 0.43,
+      "confidence": 0.78,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "interpersonal misunderstanding",
+      "importance": 0.68,
+      "confidence": 0.95,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "personality traits",
+      "importance": 0.84,
+      "confidence": 0.99,
+      "basis": "explicit"
+    }
+  ]
+}

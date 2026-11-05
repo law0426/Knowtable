@@ -1,0 +1,95 @@
+{
+  "source_document": "chapter-06-draft.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "Mara Venn",
+      "importance": 0.86,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.8,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "missing register page",
+      "importance": 0.97,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "damaged archival records",
+      "importance": 0.81,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "document tampering",
+      "importance": 0.82,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "West Wing fire",
+      "importance": 0.73,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "basement archive",
+      "importance": 0.74,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "suspicion between siblings",
+      "importance": 0.79,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "uncertain evidence",
+      "importance": 0.86,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "withheld information",
+      "importance": 0.7,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "narrative tension",
+      "importance": 0.77,
+      "confidence": 0.96,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "scene dialogue",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "mystery investigation",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "physical evidence",
+      "importance": 0.75,
+      "confidence": 0.97,
+      "basis": "explicit"
+    }
+  ]
+}

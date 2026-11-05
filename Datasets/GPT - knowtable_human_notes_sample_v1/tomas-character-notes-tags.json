@@ -1,0 +1,101 @@
+{
+  "source_document": "tomas-character-notes.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.98,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "municipal facilities maintenance",
+      "importance": 0.91,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "electrical maintenance",
+      "importance": 0.78,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "building access",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "West Wing fire",
+      "importance": 0.83,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "disputed alibi",
+      "importance": 0.88,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "access-card log",
+      "importance": 0.82,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "sibling conflict",
+      "importance": 0.8,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "practical problem-solving",
+      "importance": 0.77,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "emotional avoidance",
+      "importance": 0.67,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "possible evidence concealment",
+      "importance": 0.67,
+      "confidence": 0.85,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "character motivation",
+      "importance": 0.79,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "shared family history",
+      "importance": 0.62,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "municipal building layout",
+      "importance": 0.66,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "uncertain culpability",
+      "importance": 0.69,
+      "confidence": 0.96,
+      "basis": "explicit"
+    }
+  ]
+}

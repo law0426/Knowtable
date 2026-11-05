@@ -1,0 +1,107 @@
+{
+  "source_document": "project-overview.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "municipal archive",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "archive fire",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "missing document",
+      "importance": 0.91,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "Mara Venn",
+      "importance": 0.83,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.78,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "document transfer records",
+      "importance": 0.84,
+      "confidence": 0.97,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "altered inventory",
+      "importance": 0.83,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "fire investigation",
+      "importance": 0.8,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "access log",
+      "importance": 0.7,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "institutional secrecy",
+      "importance": 0.76,
+      "confidence": 0.91,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "evidence reliability",
+      "importance": 0.78,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "truth versus loyalty",
+      "importance": 0.7,
+      "confidence": 0.92,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "ethical dilemma",
+      "importance": 0.65,
+      "confidence": 0.94,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "mystery plot development",
+      "importance": 0.64,
+      "confidence": 0.97,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "uncertain cause of fire",
+      "importance": 0.58,
+      "confidence": 0.95,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "records tampering",
+      "importance": 0.72,
+      "confidence": 0.94,
+      "basis": "inferred"
+    }
+  ]
+}

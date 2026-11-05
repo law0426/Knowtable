@@ -1,0 +1,107 @@
+{
+  "source_document": "mara-character-summary.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "Mara Venn",
+      "importance": 0.98,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "municipal archivist",
+      "importance": 0.91,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "records management",
+      "importance": 0.8,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "document integrity",
+      "importance": 0.8,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "attention to omissions",
+      "importance": 0.88,
+      "confidence": 0.97,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "skepticism of certainty",
+      "importance": 0.77,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "guarded personality",
+      "importance": 0.71,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.64,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "sibling conflict",
+      "importance": 0.7,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "damaged paper fragments",
+      "importance": 0.55,
+      "confidence": 0.96,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "professional ethics",
+      "importance": 0.71,
+      "confidence": 0.94,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "institutional pressure",
+      "importance": 0.68,
+      "confidence": 0.95,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "character development",
+      "importance": 0.77,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "truth versus loyalty",
+      "importance": 0.7,
+      "confidence": 0.91,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "investigation",
+      "importance": 0.65,
+      "confidence": 0.93,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "evidence-based reasoning",
+      "importance": 0.73,
+      "confidence": 0.95,
+      "basis": "inferred"
+    }
+  ]
+}

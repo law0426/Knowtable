@@ -1,0 +1,107 @@
+{
+  "source_document": "mara-history.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "Mara Venn",
+      "importance": 0.91,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "municipal archive employment",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "West Wing fire",
+      "importance": 0.84,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "recovery inventory",
+      "importance": 0.93,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "altered records",
+      "importance": 0.9,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "missing disposal record",
+      "importance": 0.83,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "professional ethics",
+      "importance": 0.81,
+      "confidence": 0.97,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "refusal to sign",
+      "importance": 0.79,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "questionable initials",
+      "importance": 0.77,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "institutional pressure",
+      "importance": 0.82,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "workplace exclusion",
+      "importance": 0.59,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "records integrity",
+      "importance": 0.85,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "father-daughter influence",
+      "importance": 0.49,
+      "confidence": 0.9,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.67,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "sibling disagreement",
+      "importance": 0.71,
+      "confidence": 0.97,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "resignation",
+      "importance": 0.72,
+      "confidence": 0.99,
+      "basis": "explicit"
+    }
+  ]
+}

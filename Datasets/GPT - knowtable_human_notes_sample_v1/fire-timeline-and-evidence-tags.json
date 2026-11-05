@@ -1,0 +1,107 @@
+{
+  "source_document": "fire-timeline-and-evidence.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "West Wing fire",
+      "importance": 0.97,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "incident timeline",
+      "importance": 0.96,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "access-card log",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "Tomas Venn",
+      "importance": 0.79,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "Mara Venn",
+      "importance": 0.7,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "recovery inventory",
+      "importance": 0.93,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "altered records",
+      "importance": 0.89,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "missing register page",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "cause of fire",
+      "importance": 0.86,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "electrical fault hypothesis",
+      "importance": 0.72,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "chain of custody",
+      "importance": 0.79,
+      "confidence": 0.98,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "evidence provenance",
+      "importance": 0.87,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "uncertainty management",
+      "importance": 0.81,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "badge identity ambiguity",
+      "importance": 0.79,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "document version history",
+      "importance": 0.76,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "fire investigation",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "basis": "explicit"
+    }
+  ]
+}

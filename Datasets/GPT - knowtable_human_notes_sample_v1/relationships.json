@@ -1,0 +1,55 @@
+{
+  "description": "Illustrative relationships between source notes; these are separate from the body-only tag annotations.",
+  "relationships": [
+    {
+      "from": "project-overview.md",
+      "to": "mara-character-summary.md",
+      "type": "project-context"
+    },
+    {
+      "from": "project-overview.md",
+      "to": "fire-timeline-and-evidence.md",
+      "type": "project-context"
+    },
+    {
+      "from": "mara-character-summary.md",
+      "to": "mara-personality.md",
+      "type": "parent_of"
+    },
+    {
+      "from": "mara-character-summary.md",
+      "to": "mara-history.md",
+      "type": "parent_of"
+    },
+    {
+      "from": "mara-character-summary.md",
+      "to": "tomas-character-notes.md",
+      "type": "related-character"
+    },
+    {
+      "from": "chapter-06-draft.md",
+      "to": "chapter-06-revision-notes.md",
+      "type": "revision_notes_for"
+    },
+    {
+      "from": "chapter-06-draft.md",
+      "to": "archive-research-scraps.md",
+      "type": "research_reference"
+    },
+    {
+      "from": "chapter-06-draft.md",
+      "to": "fire-timeline-and-evidence.md",
+      "type": "continuity_reference"
+    },
+    {
+      "from": "chapter-06-draft.md",
+      "to": "old-municipal-building-setting.md",
+      "type": "setting_reference"
+    },
+    {
+      "from": "tomas-character-notes.md",
+      "to": "fire-timeline-and-evidence.md",
+      "type": "evidence_context"
+    }
+  ]
+}

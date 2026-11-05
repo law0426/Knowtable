@@ -1,0 +1,101 @@
+{
+  "source_document": "old-municipal-building-setting.md",
+  "annotation_scope": "document body only; do not inherit parent or linked-card tags",
+  "score_definitions": {
+    "importance": "How central this concept is to the document content, from 0 to 1.",
+    "confidence": "How confident the annotator is that this concept is supported by the document, from 0 to 1.",
+    "basis": "explicit if directly stated, inferred if reasonably implied."
+  },
+  "tags": [
+    {
+      "phrase": "municipal building",
+      "importance": 0.95,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "old building architecture",
+      "importance": 0.8,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "West Wing",
+      "importance": 0.83,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "basement layout",
+      "importance": 0.9,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "archive recovery room",
+      "importance": 0.88,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "service corridors",
+      "importance": 0.85,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "building access",
+      "importance": 0.73,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "maintenance infrastructure",
+      "importance": 0.72,
+      "confidence": 0.98,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "pipes and ventilation",
+      "importance": 0.65,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "atmospheric description",
+      "importance": 0.72,
+      "confidence": 0.97,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "scene blocking",
+      "importance": 0.82,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "sound design",
+      "importance": 0.65,
+      "confidence": 0.96,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "fire doors",
+      "importance": 0.62,
+      "confidence": 0.99,
+      "basis": "explicit"
+    },
+    {
+      "phrase": "institutional history",
+      "importance": 0.59,
+      "confidence": 0.95,
+      "basis": "inferred"
+    },
+    {
+      "phrase": "spatial continuity",
+      "importance": 0.82,
+      "confidence": 0.97,
+      "basis": "explicit"
+    }
+  ]
+}
