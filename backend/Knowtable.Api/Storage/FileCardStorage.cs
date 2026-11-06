@@ -81,7 +81,7 @@ public sealed class FileCardStorage : ICardStorage
                 cancellationToken);
 
         var backFile =
-            await FileStorageHelpers.ReadJsonAsync<CardBackFile>(
+            await FileStorageHelpers.ReadJsonAsync<CardMetadataFile>(
                 backPath,
                 cancellationToken);
 
@@ -96,7 +96,7 @@ public sealed class FileCardStorage : ICardStorage
             FrontContent = frontFile?.FrontContent is { } content
                 ? content.Clone()
                 : null,
-            Back = new CardBackDocument
+            Metadata = new CardMetadataDocument
             {
                 TagIds = backFile?.TagIds ?? new()
             },
@@ -136,13 +136,13 @@ public sealed class FileCardStorage : ICardStorage
             frontFile,
             cancellationToken);
 
-        var backFile = new CardBackFile
+        var backFile = new CardMetadataFile
         {
             Metadata = new CardFileMetadata
             {
                 SavedAtUtc = timestamp
             },
-            TagIds = card.Back.TagIds
+            TagIds = card.Metadata.TagIds
         };
 
         await FileStorageHelpers.WriteJsonAtomicallyAsync(
@@ -173,7 +173,7 @@ public sealed class FileCardStorage : ICardStorage
         public JsonElement? FrontContent { get; set; }
     }
 
-    private sealed class CardBackFile
+    private sealed class CardMetadataFile
     {
         [JsonPropertyName("_meta")]
         public CardFileMetadata? Metadata { get; set; }

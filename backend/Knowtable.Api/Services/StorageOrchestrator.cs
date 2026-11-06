@@ -51,9 +51,9 @@ public sealed class StorageOrchestrator
         {
             Id = welcomeCard.Id,
             FrontContent = CloneContent(welcomeCard.FrontContent),
-            Back = new CardBackDocument
+            Metadata = new CardMetadataDocument
             {
-                TagIds = welcomeCard.Back.TagIds.ToList()
+                TagIds = welcomeCard.Metadata.TagIds.ToList()
             },
             SavedAtUtc = welcomeCard.SavedAtUtc
         };
@@ -161,7 +161,7 @@ public sealed class StorageOrchestrator
         {
             Id = Guid.NewGuid(),
             FrontContent = CreateTextDocument("New card"),
-            Back = new CardBackDocument(),
+            Metadata = new CardMetadataDocument(),
             SavedAtUtc = timestamp
         };
 
@@ -331,9 +331,9 @@ public sealed class StorageOrchestrator
         {
             Id = savedCard.Id,
             FrontContent = CloneContent(savedCard.FrontContent),
-            Back = new CardBackDocument
+            Metadata = new CardMetadataDocument
             {
-                TagIds = savedCard.Back.TagIds.ToList()
+                TagIds = savedCard.Metadata.TagIds.ToList()
             },
             SavedAtUtc = DateTimeOffset.UtcNow
         };
@@ -362,7 +362,7 @@ public sealed class StorageOrchestrator
         {
             Id = card.Id,
             FrontContent = CloneContent(card.FrontContent),
-            Back = new CardBackDocument
+            Metadata = new CardMetadataDocument
             {
                 TagIds = card.TagIds.ToList()
             },
@@ -378,7 +378,7 @@ public sealed class StorageOrchestrator
         {
             Id = card.Id,
             FrontContent = CloneContent(card.FrontContent),
-            TagIds = card.Back.TagIds.ToList(),
+            TagIds = card.Metadata.TagIds.ToList(),
             X = geometry.X,
             Y = geometry.Y,
             Width = geometry.Width,
@@ -489,7 +489,7 @@ public sealed class StorageOrchestrator
         card ??= new CardDocument
         {
             Id = WelcomeCardId,
-            Back = new CardBackDocument()
+            Metadata = new CardMetadataDocument()
         };
 
         card.FrontContent = await LoadWelcomeCardContentAsync(

@@ -8,12 +8,12 @@ public sealed class CardDocument
 
     public JsonElement? FrontContent { get; set; }
 
-    public CardBackDocument Back { get; set; } = new();
+    public CardMetadataDocument Metadata { get; set; } = new();
 
     public DateTimeOffset SavedAtUtc { get; set; } = DateTimeOffset.UtcNow;
 }
 
-public sealed class CardBackDocument
+public sealed class CardMetadataDocument
 {
     public List<string> TagIds { get; set; } = new();
 }
