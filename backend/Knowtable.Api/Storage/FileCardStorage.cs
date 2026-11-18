@@ -70,9 +70,9 @@ public sealed class FileCardStorage : ICardStorage
         CancellationToken cancellationToken)
     {
         var frontPath = Path.Combine(directory, "front.json");
-        var backPath = Path.Combine(directory, "back.json");
+        var metadataPath = Path.Combine(directory, "metadata.json");
 
-        if (!File.Exists(frontPath) && !File.Exists(backPath))
+        if (!File.Exists(frontPath) && !File.Exists(metadataPath))
             return null;
 
         var frontFile =
@@ -80,15 +80,23 @@ public sealed class FileCardStorage : ICardStorage
                 frontPath,
                 cancellationToken);
 
-        var backFile =
+        var metadataFile =
             await FileStorageHelpers.ReadJsonAsync<CardMetadataFile>(
-                backPath,
+                metadataPath,
                 cancellationToken);
+
+        if (metadataFile?.CardId is Guid storedId &&
+            storedId != Guid.Empty &&
+            storedId != cardId)
+        {
+            throw new InvalidDataException(
+                $"Metadata belongs to a different card than '{cardId}'.");
+        }
 
         var timestamp =
             frontFile?.Metadata?.SavedAtUtc ??
-            backFile?.Metadata?.SavedAtUtc ??
-            GetFallbackTimestamp(frontPath, backPath);
+            metadataFile?.Metadata?.SavedAtUtc ??
+            GetFallbackTimestamp(frontPath, metadataPath);
 
         return new CardDocument
         {
@@ -98,7 +106,9 @@ public sealed class FileCardStorage : ICardStorage
                 : null,
             Metadata = new CardMetadataDocument
             {
-                TagIds = backFile?.TagIds ?? new()
+                CardId = cardId,
+                TagIds = metadataFile?.TagIds ?? new(),
+                Node = metadataFile?.Node ?? new SemanticNodeMetadata()
             },
             SavedAtUtc = timestamp
         };
@@ -118,8 +128,9 @@ public sealed class FileCardStorage : ICardStorage
         var timestamp = card.SavedAtUtc;
 
         var frontPath = Path.Combine(directory, "front.json");
-        var backPath = Path.Combine(directory, "back.json");
+        var metadataPath = Path.Combine(directory, "metadata.json");
 
+        // Store card content.
         var frontFile = new CardFrontFile
         {
             Metadata = new CardFileMetadata
@@ -136,26 +147,40 @@ public sealed class FileCardStorage : ICardStorage
             frontFile,
             cancellationToken);
 
-        var backFile = new CardMetadataFile
+        // Prepare card metadata.
+        var metadata = card.Metadata;
+
+        metadata.CardId = card.Id;
+
+        if (metadata.Node is null)
+            metadata.Node = new SemanticNodeMetadata();
+
+        if (metadata.Node.Id == Guid.Empty)
+            metadata.Node.Id = Guid.NewGuid();
+
+        // Store metadata, including semantic node and embedding.
+        var metadataFile = new CardMetadataFile
         {
             Metadata = new CardFileMetadata
             {
                 SavedAtUtc = timestamp
             },
-            TagIds = card.Metadata.TagIds
+            CardId = metadata.CardId,
+            TagIds = metadata.TagIds,
+            Node = metadata.Node
         };
 
         await FileStorageHelpers.WriteJsonAtomicallyAsync(
-            backPath,
-            backFile,
+            metadataPath,
+            metadataFile,
             cancellationToken);
     }
 
     private static DateTimeOffset GetFallbackTimestamp(
         string frontPath,
-        string backPath)
+        string metadataPath)
     {
-        var existingPaths = new[] { frontPath, backPath }
+        var existingPaths = new[] { frontPath, metadataPath }
             .Where(File.Exists)
             .ToArray();
 
@@ -174,12 +199,16 @@ public sealed class FileCardStorage : ICardStorage
     }
 
     private sealed class CardMetadataFile
-    {
-        [JsonPropertyName("_meta")]
-        public CardFileMetadata? Metadata { get; set; }
+{
+    [JsonPropertyName("_meta")]
+    public CardFileMetadata? Metadata { get; set; }
 
-        public List<string> TagIds { get; set; } = new();
-    }
+    public Guid CardId { get; set; }
+
+    public List<string> TagIds { get; set; } = new();
+
+    public SemanticNodeMetadata Node { get; set; } = new();
+}
 
     private sealed class CardFileMetadata
     {
