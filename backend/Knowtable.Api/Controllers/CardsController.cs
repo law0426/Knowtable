@@ -40,6 +40,8 @@ public sealed class CardsController : ControllerBase
         if (card.Id != cardId)
             return BadRequest("Card ID does not match the route.");
 
+        // TEMP: Test Tiptap text extraction
+        
         var result = await _storage.AutosaveCardAsync(
             projectId, card, cancellationToken);
 
@@ -55,6 +57,8 @@ public sealed class CardsController : ControllerBase
     {
         if (card.Id != cardId)
             return BadRequest("Card ID does not match the route.");
+
+
 
         var result = await _storage.SaveCardAsync(
             projectId, card, cancellationToken);

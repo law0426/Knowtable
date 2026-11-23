@@ -235,6 +235,7 @@ public sealed class StorageOrchestrator
 
         EnsureUniqueCardIds(project.Cards);
 
+        
         // Save every card's working and saved copies.
         foreach (var card in project.Cards)
         {
@@ -290,7 +291,11 @@ public sealed class StorageOrchestrator
         CardDto card,
         CancellationToken cancellationToken = default)
     {
+        
         ValidateCard(projectId, card);
+
+
+
 
         var document = ToDocument(card, DateTimeOffset.UtcNow);
 

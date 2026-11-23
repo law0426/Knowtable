@@ -74,7 +74,6 @@ public sealed class ProjectsController : ControllerBase
     {
         if (project.Id != projectId)
             return BadRequest("Project ID does not match the route.");
-
         var result = await _storage.SaveProjectAsync(
             project, cancellationToken);
 
