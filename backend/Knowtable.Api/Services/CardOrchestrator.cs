@@ -9,6 +9,16 @@ namespace Knowtable.Api.Services;
 
 public sealed class CardOrchestrator
 {
+    public CardOrchestrator(
+        IProjectStorage projectStorage,
+        ICardStorage cardStorage,
+        IOllamaEmbeddingService embeddingService)
+    {
+        _projectStorage = projectStorage;
+        _cardStorage = cardStorage;
+        _embeddingService = embeddingService;
+    }
+
     private readonly IProjectStorage _projectStorage;
     private readonly ICardStorage _cardStorage;
 
@@ -71,6 +81,7 @@ public sealed class CardOrchestrator
 
         return ToDto(card, geometry);
     }
+    private readonly IOllamaEmbeddingService _embeddingService;
 
     public async Task<CardDocument> CreateWorkingCopyAsync(
         Guid projectId,
@@ -131,6 +142,9 @@ public sealed class CardOrchestrator
         var document = ToDocument(
             card, DateTimeOffset.UtcNow, existingCard);
 
+        await UpdateEmbeddingAsync(
+            document, existingCard, cancellationToken);
+
         await _cardStorage.StoreUnsavedCardAsync(
             projectId, document, cancellationToken);
 
@@ -154,6 +168,9 @@ public sealed class CardOrchestrator
 
         var document = ToDocument(
             card, DateTimeOffset.UtcNow, existingCard);
+
+        await UpdateEmbeddingAsync(
+            document, existingCard, cancellationToken);
 
         await _cardStorage.StoreUnsavedCardAsync(
             projectId, document, cancellationToken);
@@ -334,6 +351,21 @@ public sealed class CardOrchestrator
             ["type"] = "doc",
             ["content"] = paragraphs
         });
+    }
+
+    private async Task UpdateEmbeddingAsync(
+        CardDocument document,
+        CardDocument? existingCard,
+        CancellationToken cancellationToken)
+    {
+        var text = TiptapTextExtractor.ExtractText(
+            document.FrontContent);
+
+        document.Metadata.Node.Embedding =
+            await _embeddingService.GetOrCreateEmbeddingAsync(
+                text,
+                existingCard?.Metadata?.Node?.Embedding,
+                cancellationToken);
     }
 
     public async Task<CardDocument> GetOrCreateWelcomeCardAsync(

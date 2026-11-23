@@ -6,6 +6,7 @@ using System.Text.Json.Serialization;
 
 using Knowtable.Api.Models;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Knowtable.Api.Services;
 
@@ -13,12 +14,15 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
 {
     private readonly HttpClient _httpClient;
     private readonly string _modelName;
+    private readonly IMemoryCache _memoryCache;
 
     public OllamaEmbeddingService(
-        HttpClient httpClient,
-        IConfiguration configuration)
+    HttpClient httpClient,
+    IConfiguration configuration,
+    IMemoryCache memoryCache)
     {
         _httpClient = httpClient;
+        _memoryCache = memoryCache;
 
         _modelName = configuration["Ollama:Model"]
             ?? throw new InvalidOperationException(
@@ -34,15 +38,28 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
         }
     }
 
-    public async Task<EmbeddingMetadata> GenerateEmbeddingAsync(
+    public async Task<EmbeddingMetadata?> GetOrCreateEmbeddingAsync(
         string text,
+        EmbeddingMetadata? existingEmbedding,
         CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(text))
-            throw new ArgumentException(
-                "Embedding text cannot be empty.", nameof(text));
+            return null;
 
-        // Generate the embedding.
+        // Identify the exact text being embedded.
+        var inputHash = Convert.ToHexString(
+            SHA256.HashData(Encoding.UTF8.GetBytes(text)))
+            .ToLowerInvariant();
+
+        // Identify the currently installed model version.
+        var modelDigest = await GetModelDigestAsync(
+            _modelName, cancellationToken);
+
+        // Reuse the existing vector if both fingerprints match.
+        if (IsReusable(existingEmbedding, inputHash, modelDigest))
+            return existingEmbedding;
+
+        // Generate a new embedding.
         var request = new OllamaEmbedRequest(_modelName, text);
 
         using var response = await _httpClient.PostAsJsonAsync(
@@ -63,16 +80,10 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
             .ReadFromJsonAsync<OllamaEmbedResponse>(
                 cancellationToken: cancellationToken);
 
-        if (result?.Embeddings is not { Count: > 0 })
+        if (result?.Embeddings is not { Count: 1 })
         {
             throw new InvalidDataException(
-                "Ollama returned no embedding vectors.");
-        }
-
-        if (result.Embeddings.Count != 1)
-        {
-            throw new InvalidDataException(
-                "Expected exactly one embedding vector.");
+                "Ollama did not return exactly one embedding vector.");
         }
 
         var vector = result.Embeddings[0];
@@ -84,22 +95,12 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
                 "Ollama returned an invalid embedding vector.");
         }
 
-        // Retrieve the exact model digest.
-        var modelName = string.IsNullOrWhiteSpace(result.Model)
-            ? _modelName
-            : result.Model;
-
-        var modelDigest = await GetModelDigestAsync(
-            modelName, cancellationToken);
-
-        // Hash the exact text sent to Ollama.
-        var inputHash = Convert.ToHexString(
-            SHA256.HashData(Encoding.UTF8.GetBytes(text)))
-            .ToLowerInvariant();
-
         return new EmbeddingMetadata
         {
-            Model = modelName,
+            Model = string.IsNullOrWhiteSpace(result.Model)
+                ? _modelName
+                : result.Model,
+
             ModelDigest = modelDigest,
             Dimensions = vector.Length,
             InputHash = inputHash,
@@ -107,26 +108,50 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
         };
     }
 
+    private static bool IsReusable(
+        EmbeddingMetadata? existing,
+        string inputHash,
+        string modelDigest)
+    {
+        return existing is not null
+            && existing.Vector is { Length: > 0 }
+            && existing.Dimensions == existing.Vector.Length
+            && existing.Vector.All(float.IsFinite)
+            && existing.InputHash == inputHash
+            && existing.ModelDigest == modelDigest;
+    }
+
     private async Task<string> GetModelDigestAsync(
         string modelName,
         CancellationToken cancellationToken)
     {
-        var models = await _httpClient.GetFromJsonAsync<OllamaTagsResponse>(
-            "api/tags", cancellationToken);
+        var cacheKey =
+            $"Ollama:ModelDigest:{_httpClient.BaseAddress}:{modelName}";
 
-        var model = models?.Models.FirstOrDefault(item =>
-            string.Equals(item.Name, modelName,
-                StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(item.Model, modelName,
-                StringComparison.OrdinalIgnoreCase));
+        return await _memoryCache.GetOrCreateAsync(
+            cacheKey,
+            async entry =>
+            {
 
-        if (string.IsNullOrWhiteSpace(model?.Digest))
-        {
-            throw new InvalidOperationException(
-                $"Could not retrieve the digest for Ollama model '{modelName}'.");
-        }
+                var models = await _httpClient
+                    .GetFromJsonAsync<OllamaTagsResponse>(
+                        "api/tags", cancellationToken);
 
-        return model.Digest;
+                var model = models?.Models?.FirstOrDefault(item =>
+                    string.Equals(item.Name, modelName,
+                        StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(item.Model, modelName,
+                        StringComparison.OrdinalIgnoreCase));
+
+                if (string.IsNullOrWhiteSpace(model?.Digest))
+                {
+                    throw new InvalidOperationException(
+                        $"Could not retrieve the digest for Ollama model '{modelName}'.");
+                }
+
+                return model.Digest;
+            }) ?? throw new InvalidOperationException(
+                "Could not retrieve the Ollama model digest.");
     }
 
     private sealed record OllamaEmbedRequest(
@@ -145,7 +170,7 @@ public sealed class OllamaEmbeddingService : IOllamaEmbeddingService
     private sealed class OllamaTagsResponse
     {
         [JsonPropertyName("models")]
-        public List<OllamaModelInfo> Models { get; set; } = new();
+        public List<OllamaModelInfo>? Models { get; set; }
     }
 
     private sealed class OllamaModelInfo

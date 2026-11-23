@@ -7,4 +7,6 @@ public sealed class ProjectDocument
     public DateTimeOffset SavedAtUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public List<CardInstance> Cards { get; set; } = new();
+
+    public List<string> Tags { get; set; } = new();
 }

@@ -69,7 +69,8 @@ public sealed class StorageOrchestrator
             Cards =
             {
                 _cardOrchestrator.ToDto(workingCopy, geometry)
-            }
+            },
+            Tags = project.Tags.ToList()
         };
     }
 
@@ -104,7 +105,8 @@ public sealed class StorageOrchestrator
         {
             Id = project.Id,
             SavedAtUtc = project.SavedAtUtc,
-            Cards = cards
+            Cards = cards,
+            Tags = project.Tags.ToList()
         };
     }
 
@@ -144,7 +146,7 @@ public sealed class StorageOrchestrator
                 project.Id, card, cancellationToken);
         }
 
-        // Save the project manifest and its card positions.
+        // Save the project manifest, positions and tags.
         return await AutosaveProjectLayoutAsync(
             project, cancellationToken);
     }
@@ -173,7 +175,8 @@ public sealed class StorageOrchestrator
                     Width = card.Width,
                     Height = card.Height
                 }
-            }).ToList()
+            }).ToList(),
+            Tags = project.Tags.ToList()
         };
 
         await _projectStorage.StoreProjectAsync(

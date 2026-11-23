@@ -7,4 +7,6 @@ public sealed class ProjectDto
     public DateTimeOffset SavedAtUtc { get; set; }
 
     public List<CardDto> Cards { get; set; } = new();
+
+    public List<string> Tags { get; set; } = new();
 }

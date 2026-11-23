@@ -4,7 +4,8 @@ namespace Knowtable.Api.Services;
 
 public interface IOllamaEmbeddingService
 {
-    Task<EmbeddingMetadata> GenerateEmbeddingAsync(
+    Task<EmbeddingMetadata?> GetOrCreateEmbeddingAsync(
         string text,
+        EmbeddingMetadata? existingEmbedding,
         CancellationToken cancellationToken = default);
 }
