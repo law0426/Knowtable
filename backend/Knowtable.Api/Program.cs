@@ -14,6 +14,14 @@ builder.Services.AddSingleton<IProjectStorage, FileProjectStorage>();
 builder.Services.AddSingleton<ICardStorage, FileCardStorage>();
 builder.Services.AddScoped<StorageOrchestrator>();
 builder.Services.AddScoped<CardOrchestrator>();
+builder.Services.AddHttpClient<IOllamaEmbeddingService, OllamaEmbeddingService>(client =>
+{
+    var baseUrl = builder.Configuration["Ollama:BaseUrl"]
+        ?? "http://localhost:11434/";
+
+    client.BaseAddress = new Uri(baseUrl);
+    client.Timeout = TimeSpan.FromMinutes(2);
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
