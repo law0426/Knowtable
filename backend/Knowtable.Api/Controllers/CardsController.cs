@@ -1,3 +1,4 @@
+
 using Knowtable.Api.Models;
 using Knowtable.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,11 +9,11 @@ namespace Knowtable.Api.Controllers;
 [Route("api/projects/{projectId:guid}/cards")]
 public sealed class CardsController : ControllerBase
 {
-    private readonly StorageOrchestrator _storage;
+    private readonly CardOrchestrator _cards;
 
-    public CardsController(StorageOrchestrator storage)
+    public CardsController(CardOrchestrator cards)
     {
-        _storage = storage;
+        _cards = cards;
     }
 
     [HttpPost]
@@ -21,7 +22,7 @@ public sealed class CardsController : ControllerBase
         CreateCardRequest request,
         CancellationToken cancellationToken)
     {
-        var card = await _storage.CreateCardAsync(
+        var card = await _cards.CreateCardAsync(
             projectId, request.X, request.Y, cancellationToken);
 
         if (card is null)
@@ -29,7 +30,7 @@ public sealed class CardsController : ControllerBase
 
         return Ok(card);
     }
-    
+
     [HttpPut("{cardId:guid}/autosave")]
     public async Task<ActionResult<CardDto>> Autosave(
         Guid projectId,
@@ -40,9 +41,7 @@ public sealed class CardsController : ControllerBase
         if (card.Id != cardId)
             return BadRequest("Card ID does not match the route.");
 
-        // TEMP: Test Tiptap text extraction
-        
-        var result = await _storage.AutosaveCardAsync(
+        var result = await _cards.AutosaveCardAsync(
             projectId, card, cancellationToken);
 
         return Ok(result);
@@ -58,9 +57,7 @@ public sealed class CardsController : ControllerBase
         if (card.Id != cardId)
             return BadRequest("Card ID does not match the route.");
 
-
-
-        var result = await _storage.SaveCardAsync(
+        var result = await _cards.SaveCardAsync(
             projectId, card, cancellationToken);
 
         return Ok(result);
@@ -76,7 +73,7 @@ public sealed class CardsController : ControllerBase
         if (card.Id != cardId)
             return BadRequest("Card ID does not match the route.");
 
-        var result = await _storage.RevertCardAsync(
+        var result = await _cards.RevertCardAsync(
             projectId, card, cancellationToken);
 
         return Ok(result);

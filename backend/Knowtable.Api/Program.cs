@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddSingleton<IProjectStorage, FileProjectStorage>();
 builder.Services.AddSingleton<ICardStorage, FileCardStorage>();
 builder.Services.AddScoped<StorageOrchestrator>();
+builder.Services.AddScoped<CardOrchestrator>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
