@@ -37,6 +37,8 @@ public sealed class StorageOrchestrator
     }
 
     public async Task<ProjectDto> CreateProjectAsync(
+        string title,
+        List<string>? tags = null,
         CancellationToken cancellationToken = default)
     {
         var welcomeCard = await _cardOrchestrator.GetOrCreateWelcomeCardAsync(
@@ -47,7 +49,8 @@ public sealed class StorageOrchestrator
         var project = new ProjectDocument
         {
             Id = Guid.NewGuid(),
-            Title = string.Empty,
+            Title = title,
+            Tags = tags?.ToList() ?? new(),
             Cards =
             {
                 new CardInstance
@@ -58,11 +61,13 @@ public sealed class StorageOrchestrator
             }
         };
 
-        var workingCopy = await _cardOrchestrator.CreateWorkingCopyAsync(
-            project.Id, welcomeCard, cancellationToken);
-
+        // Create the project folder and manifest first.
         await _projectStorage.StoreProjectAsync(
             project, cancellationToken);
+
+        // Only now can the working copy locate its project folder.
+        var workingCopy = await _cardOrchestrator.CreateWorkingCopyAsync(
+            project.Id, welcomeCard, cancellationToken);
 
         return new ProjectDto
         {
@@ -143,6 +148,11 @@ public sealed class StorageOrchestrator
 
         EnsureUniqueCardIds(project.Cards);
 
+        // Save the project manifest first.
+        // This also handles folder creation or renaming.
+        var savedProject = await AutosaveProjectLayoutAsync(
+            project, cancellationToken);
+
         // Save every card's working and saved copies.
         foreach (var card in project.Cards)
         {
@@ -150,9 +160,7 @@ public sealed class StorageOrchestrator
                 project.Id, card, cancellationToken);
         }
 
-        // Save the project manifest, title, tags and card positions.
-        return await AutosaveProjectLayoutAsync(
-            project, cancellationToken);
+        return savedProject;
     }
 
     public async Task<ProjectDto> AutosaveProjectLayoutAsync(

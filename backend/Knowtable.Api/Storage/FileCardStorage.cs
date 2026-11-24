@@ -1,5 +1,7 @@
+
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using Knowtable.Api.Models;
 using Microsoft.Extensions.Configuration;
 
@@ -8,10 +10,12 @@ namespace Knowtable.Api.Storage;
 public sealed class FileCardStorage : ICardStorage
 {
     private readonly string _rootPath;
+    private readonly string _projectsRoot;
 
     public FileCardStorage(IConfiguration configuration)
     {
         _rootPath = FileStorageHelpers.GetRootPath(configuration);
+        _projectsRoot = Path.Combine(_rootPath, "Projects");
     }
 
     public Task<CardDocument?> LoadSavedCardAsync(
@@ -34,34 +38,47 @@ public sealed class FileCardStorage : ICardStorage
         return StoreCardAsync(path, card, cancellationToken);
     }
 
-    public Task<CardDocument?> LoadUnsavedCardAsync(
+    public async Task<CardDocument?> LoadUnsavedCardAsync(
         Guid projectId,
         Guid cardId,
         CancellationToken cancellationToken = default)
     {
+        var projectDirectory =
+            await FileStorageHelpers.FindProjectDirectoryAsync(
+                _projectsRoot, projectId, cancellationToken);
+
+        if (projectDirectory is null)
+            return null;
+
         var path = Path.Combine(
-            _rootPath,
-            "Projects",
-            projectId.ToString("D"),
+            projectDirectory,
             "Cards",
             cardId.ToString("D"));
 
-        return LoadCardAsync(path, cardId, cancellationToken);
+        return await LoadCardAsync(path, cardId, cancellationToken);
     }
 
-    public Task StoreUnsavedCardAsync(
+    public async Task StoreUnsavedCardAsync(
         Guid projectId,
         CardDocument card,
         CancellationToken cancellationToken = default)
     {
+        var projectDirectory =
+            await FileStorageHelpers.FindProjectDirectoryAsync(
+                _projectsRoot, projectId, cancellationToken);
+
+        if (projectDirectory is null)
+        {
+            throw new DirectoryNotFoundException(
+                $"Could not find project folder for '{projectId}'.");
+        }
+
         var path = Path.Combine(
-            _rootPath,
-            "Projects",
-            projectId.ToString("D"),
+            projectDirectory,
             "Cards",
             card.Id.ToString("D"));
 
-        return StoreCardAsync(path, card, cancellationToken);
+        await StoreCardAsync(path, card, cancellationToken);
     }
 
     private static async Task<CardDocument?> LoadCardAsync(
@@ -77,13 +94,11 @@ public sealed class FileCardStorage : ICardStorage
 
         var frontFile =
             await FileStorageHelpers.ReadJsonAsync<CardFrontFile>(
-                frontPath,
-                cancellationToken);
+                frontPath, cancellationToken);
 
         var metadataFile =
             await FileStorageHelpers.ReadJsonAsync<CardMetadataFile>(
-                metadataPath,
-                cancellationToken);
+                metadataPath, cancellationToken);
 
         if (metadataFile?.CardId is Guid storedId &&
             storedId != Guid.Empty &&
@@ -143,9 +158,7 @@ public sealed class FileCardStorage : ICardStorage
         };
 
         await FileStorageHelpers.WriteJsonAtomicallyAsync(
-            frontPath,
-            frontFile,
-            cancellationToken);
+            frontPath, frontFile, cancellationToken);
 
         // Prepare card metadata.
         var metadata = card.Metadata;
@@ -171,9 +184,7 @@ public sealed class FileCardStorage : ICardStorage
         };
 
         await FileStorageHelpers.WriteJsonAtomicallyAsync(
-            metadataPath,
-            metadataFile,
-            cancellationToken);
+            metadataPath, metadataFile, cancellationToken);
     }
 
     private static DateTimeOffset GetFallbackTimestamp(
@@ -199,16 +210,16 @@ public sealed class FileCardStorage : ICardStorage
     }
 
     private sealed class CardMetadataFile
-{
-    [JsonPropertyName("_meta")]
-    public CardFileMetadata? Metadata { get; set; }
+    {
+        [JsonPropertyName("_meta")]
+        public CardFileMetadata? Metadata { get; set; }
 
-    public Guid CardId { get; set; }
+        public Guid CardId { get; set; }
 
-    public List<string> TagIds { get; set; } = new();
+        public List<string> TagIds { get; set; } = new();
 
-    public SemanticNodeMetadata Node { get; set; } = new();
-}
+        public SemanticNodeMetadata Node { get; set; } = new();
+    }
 
     private sealed class CardFileMetadata
     {

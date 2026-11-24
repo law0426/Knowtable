@@ -37,6 +37,8 @@ export default function App() {
   const {
     projectId,
     projectTitle,
+    projectTags,
+    isProjectDetailsDirty,
     isLoading,
     error,
     startNewProject,
@@ -144,9 +146,11 @@ export default function App() {
 
       <ProjectSaveButton
         projectId={projectId}
+        projectTitle={projectTitle}
+        projectTags={projectTags}
         cards={cards}
-        replaceCards={replaceCards}
         isDirty={isDirty}
+        isProjectDetailsDirty={isProjectDetailsDirty}
         activateSavedProject={activateSavedProject}
       />
     </>

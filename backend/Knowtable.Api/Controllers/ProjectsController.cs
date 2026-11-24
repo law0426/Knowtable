@@ -38,9 +38,12 @@ public sealed class ProjectsController : ControllerBase
 
     [HttpPost]
     public async Task<ActionResult<ProjectDto>> CreateProject(
+        ProjectDto request,
         CancellationToken cancellationToken)
     {
         var project = await _storage.CreateProjectAsync(
+            request.Title,
+            request.Tags,
             cancellationToken);
 
         return CreatedAtAction(

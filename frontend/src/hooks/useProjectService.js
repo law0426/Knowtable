@@ -13,9 +13,9 @@ export default function useProjectService({
     const [error, setError] = useState(null);
 
     const saveProject = useCallback(async (cards, titleOverride) => {
-        if ((!isDirty && !isProjectDetailsDirty) || isSaving) return;
-
         const isDraft = !projectId;
+
+        if ((!isDraft && !isDirty && !isProjectDetailsDirty) || isSaving) return;
         const title = (titleOverride ?? projectTitle ?? "").trim();
 
         if (isDraft && !title) {
