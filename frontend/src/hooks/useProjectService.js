@@ -1,18 +1,28 @@
+
 import { useCallback, useState } from "react";
 
 export default function useProjectService({
     projectId,
-    replaceCards,
-    activateSavedProject,
+    projectTitle,
+    projectTags,
     isDirty,
+    isProjectDetailsDirty,
+    activateSavedProject,
 }) {
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
 
-    const saveProject = useCallback(async (cards) => {
-        if (!isDirty || isSaving) return;
+    const saveProject = useCallback(async (cards, titleOverride) => {
+        if ((!isDirty && !isProjectDetailsDirty) || isSaving) return;
 
         const isDraft = !projectId;
+        const title = (titleOverride ?? projectTitle ?? "").trim();
+
+        if (isDraft && !title) {
+            setError("A project title is required.");
+            return;
+        }
+
         const endpoint = isDraft
             ? "/api/projects/draft/save"
             : `/api/projects/${projectId}/save`;
@@ -26,7 +36,9 @@ export default function useProjectService({
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     id: projectId ?? "00000000-0000-0000-0000-000000000000",
-                    cards: cards.map(card => ({
+                    title,
+                    tags: projectTags ?? [],
+                    cards: cards.map((card) => ({
                         id: card.id,
                         frontContent: card.frontContent ?? {
                             type: "doc",
@@ -47,11 +59,9 @@ export default function useProjectService({
 
             const project = await response.json();
 
-            if (isDraft) {
-                activateSavedProject(project);
-            } else {
-                replaceCards(project.cards ?? []);
-            }
+            // Synchronize the active project after every successful save.
+            activateSavedProject(project);
+
         } catch (err) {
             setError(err.message);
         } finally {
@@ -59,9 +69,11 @@ export default function useProjectService({
         }
     }, [
         projectId,
+        projectTitle,
+        projectTags,
         isDirty,
+        isProjectDetailsDirty,
         isSaving,
-        replaceCards,
         activateSavedProject,
     ]);
 

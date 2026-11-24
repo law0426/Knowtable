@@ -13,7 +13,7 @@ import {
   useCamera
 } from "./utils/camera"
 import WorldLayer from "./components/WorldLayer";
-import useProjectLoader from "./hooks/useProjectLoader";
+import useProjectDataManager from "./hooks/useProjectDataManager";
 import ProjectSaveButton from "./components/ProjectSaveButton";
 import NewProjectButton from "./components/NewProjectButton";
 import ProjectSelector from "./components/ProjectSelector";
@@ -36,13 +36,14 @@ export default function App() {
 
   const {
     projectId,
+    projectTitle,
     isLoading,
     error,
     startNewProject,
     isStartingNewProject,
     loadProject,
     activateSavedProject,
-  } = useProjectLoader(replaceCards);
+  } = useProjectDataManager(replaceCards);
 
   const {
     activeCardId,
@@ -125,6 +126,7 @@ export default function App() {
       </Canvas>
 
       <ProjectSelector
+        projectTitle={projectTitle}
         loadProject={loadProject}
         isLoading={isLoading}
       />

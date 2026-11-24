@@ -26,6 +26,7 @@ public sealed class StorageOrchestrator
         return new ProjectDto
         {
             Id = Guid.Empty,
+            Title = string.Empty,
             SavedAtUtc = DateTimeOffset.UtcNow,
             Cards =
             {
@@ -46,6 +47,7 @@ public sealed class StorageOrchestrator
         var project = new ProjectDocument
         {
             Id = Guid.NewGuid(),
+            Title = string.Empty,
             Cards =
             {
                 new CardInstance
@@ -65,6 +67,7 @@ public sealed class StorageOrchestrator
         return new ProjectDto
         {
             Id = project.Id,
+            Title = project.Title,
             SavedAtUtc = project.SavedAtUtc,
             Cards =
             {
@@ -104,6 +107,7 @@ public sealed class StorageOrchestrator
         return new ProjectDto
         {
             Id = project.Id,
+            Title = project.Title,
             SavedAtUtc = project.SavedAtUtc,
             Cards = cards,
             Tags = project.Tags.ToList()
@@ -146,7 +150,7 @@ public sealed class StorageOrchestrator
                 project.Id, card, cancellationToken);
         }
 
-        // Save the project manifest, positions and tags.
+        // Save the project manifest, title, tags and card positions.
         return await AutosaveProjectLayoutAsync(
             project, cancellationToken);
     }
@@ -165,6 +169,7 @@ public sealed class StorageOrchestrator
         var document = new ProjectDocument
         {
             Id = project.Id,
+            Title = project.Title,
             Cards = project.Cards.Select(card => new CardInstance
             {
                 CardId = card.Id,

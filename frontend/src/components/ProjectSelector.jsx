@@ -1,32 +1,57 @@
-import { useEffect, useState } from "react";
 
-export default function ProjectSelector({ loadProject, isLoading }) {
-    const [projects, setProjects] = useState([]);
-    const [selectedId, setSelectedId] = useState("");
+import { useState } from "react";
+
+export default function ProjectSelector({
+    projectTitle,
+    loadProject,
+    isLoading,
+}) {
+    const [isSelecting, setIsSelecting] = useState(false);
     const [error, setError] = useState(null);
 
-    async function refreshProjects() {
-        try {
-            const response = await fetch("/api/projects");
+    async function handleSelectProject() {
+        if (!window.showDirectoryPicker) {
+            setError("Folder selection requires Chrome or Edge.");
+            return;
+        }
 
-            if (!response.ok) {
-                throw new Error(`Loading projects failed: ${response.status}`);
+        setIsSelecting(true);
+        setError(null);
+
+        try {
+            // Let the user select a project folder.
+            const directory = await window.showDirectoryPicker({
+                id: "knowtable-project",
+                mode: "read",
+            });
+
+            // Read the project manifest.
+            const manifestHandle = await directory.getFileHandle(
+                "project.json"
+            );
+
+            const file = await manifestHandle.getFile();
+            const project = JSON.parse(await file.text());
+
+            if (!project.id) {
+                throw new Error(
+                    "The selected project.json has no project ID."
+                );
             }
 
-            setProjects(await response.json());
-            setError(null);
+            // Load the project through the existing API workflow.
+            await loadProject(project.id);
+
         } catch (err) {
-            setError(err.message);
-        }
-    }
+            if (err.name === "AbortError") return;
 
-    useEffect(() => {
-        refreshProjects();
-    }, []);
-
-    async function handleLoad() {
-        if (selectedId) {
-            await loadProject(selectedId);
+            if (err.name === "NotFoundError") {
+                setError("No project.json found in that folder.");
+            } else {
+                setError(err.message || "Failed to select project.");
+            }
+        } finally {
+            setIsSelecting(false);
         }
     }
 
@@ -36,37 +61,36 @@ export default function ProjectSelector({ loadProject, isLoading }) {
             top: 16,
             left: 150,
             zIndex: 10000,
-            display: "flex",
-            gap: 6,
         }}>
-            <select
-                aria-label="Select project"
-                value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                disabled={isLoading}
-            >
-                <option value="">Select project...</option>
-                {projects.map((project) => (
-                    <option key={project.id} value={project.id}>
-                        {project.id.slice(0, 8)} —{" "}
-                        {new Date(project.savedAtUtc).toLocaleString()}
-                    </option>
-                ))}
-            </select>
-
             <button
                 type="button"
-                onClick={handleLoad}
-                disabled={!selectedId || isLoading}
+                onClick={handleSelectProject}
+                disabled={isLoading || isSelecting}
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                    padding: "8px 12px",
+                    background: "white",
+                    border: "1px solid #ccc",
+                    borderRadius: 5,
+                    cursor: isSelecting ? "wait" : "pointer",
+                }}
             >
-                Load
+                <span>
+                    {isSelecting
+                        ? "Opening project..."
+                        : `Current project: ${projectTitle || "Unsaved project"}`}
+                </span>
+
+                <span aria-hidden="true">▾</span>
             </button>
 
-            <button type="button" onClick={refreshProjects}>
-                Refresh
-            </button>
-
-            {error && <span role="alert">{error}</span>}
+            {error && (
+                <p role="alert" style={{ color: "red" }}>
+                    {error}
+                </p>
+            )}
         </div>
     );
 }

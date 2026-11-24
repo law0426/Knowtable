@@ -1,15 +1,32 @@
+
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const PROJECT_ID_KEY = "knowtable.projectId";
 
-export default function useProjectLoader(replaceCards) {
+export default function useProjectDataManager(replaceCards) {
     const [projectId, setProjectId] = useState(
         () => localStorage.getItem(PROJECT_ID_KEY)
     );
+    const [projectTitle, setProjectTitle] = useState("");
+    const [projectTags, setProjectTags] = useState([]);
+    const [isProjectDetailsDirty, setIsProjectDetailsDirty] = useState(false);
+
     const [isLoading, setIsLoading] = useState(true);
     const [isStartingNewProject, setIsStartingNewProject] = useState(false);
     const [error, setError] = useState(null);
+
     const started = useRef(false);
+
+    const applyProject = useCallback((project) => {
+        localStorage.setItem(PROJECT_ID_KEY, project.id);
+
+        setProjectId(project.id);
+        setProjectTitle(project.title ?? "");
+        setProjectTags(project.tags ?? []);
+        setIsProjectDetailsDirty(false);
+
+        replaceCards(project.cards ?? []);
+    }, [replaceCards]);
 
     const fetchDraft = useCallback(async () => {
         const response = await fetch("/api/projects/draft");
@@ -38,7 +55,12 @@ export default function useProjectLoader(replaceCards) {
             const draft = await fetchDraft();
 
             localStorage.removeItem(PROJECT_ID_KEY);
+
             setProjectId(null);
+            setProjectTitle("");
+            setProjectTags([]);
+            setIsProjectDetailsDirty(false);
+
             replaceCards(draft.cards ?? []);
 
             return true;
@@ -63,9 +85,7 @@ export default function useProjectLoader(replaceCards) {
 
             const project = await response.json();
 
-            localStorage.setItem(PROJECT_ID_KEY, project.id);
-            setProjectId(project.id);
-            replaceCards(project.cards ?? []);
+            applyProject(project);
 
             return true;
         } catch (err) {
@@ -74,13 +94,21 @@ export default function useProjectLoader(replaceCards) {
         } finally {
             setIsLoading(false);
         }
-    }, [replaceCards]);
+    }, [applyProject]);
 
     const activateSavedProject = useCallback((project) => {
-        localStorage.setItem(PROJECT_ID_KEY, project.id);
-        setProjectId(project.id);
-        replaceCards(project.cards ?? []);
-    }, [replaceCards]);
+        applyProject(project);
+    }, [applyProject]);
+
+    const updateProjectTitle = useCallback((title) => {
+        setProjectTitle(title);
+        setIsProjectDetailsDirty(true);
+    }, []);
+
+    const updateProjectTags = useCallback((tags) => {
+        setProjectTags(tags);
+        setIsProjectDetailsDirty(true);
+    }, []);
 
     useEffect(() => {
         if (started.current) return;
@@ -95,9 +123,7 @@ export default function useProjectLoader(replaceCards) {
 
                     if (response.ok) {
                         const project = await response.json();
-
-                        setProjectId(project.id);
-                        replaceCards(project.cards ?? []);
+                        applyProject(project);
                         return;
                     }
 
@@ -113,6 +139,10 @@ export default function useProjectLoader(replaceCards) {
                 const draft = await fetchDraft();
 
                 setProjectId(null);
+                setProjectTitle("");
+                setProjectTags([]);
+                setIsProjectDetailsDirty(false);
+
                 replaceCards(draft.cards ?? []);
             } catch (err) {
                 setError(err.message);
@@ -122,15 +152,22 @@ export default function useProjectLoader(replaceCards) {
         }
 
         initializeProject();
-    }, [fetchDraft, replaceCards]);
+    }, [fetchDraft, applyProject, replaceCards]);
 
     return {
         projectId,
+        projectTitle,
+        projectTags,
+        isProjectDetailsDirty,
+        updateProjectTitle,
+        updateProjectTags,
+
         isLoading,
         isStartingNewProject,
         error,
+
         startNewProject,
         loadProject,
-        activateSavedProject, 
+        activateSavedProject,
     };
 }

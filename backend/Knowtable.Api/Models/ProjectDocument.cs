@@ -4,6 +4,8 @@ public sealed class ProjectDocument
 {
     public Guid Id { get; set; } = Guid.NewGuid();
 
+    public string Title { get; set; } = string.Empty;
+
     public DateTimeOffset SavedAtUtc { get; set; } = DateTimeOffset.UtcNow;
 
     public List<CardInstance> Cards { get; set; } = new();
